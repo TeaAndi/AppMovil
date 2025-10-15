@@ -1,0 +1,7 @@
+{
+  "name": "sixd",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
