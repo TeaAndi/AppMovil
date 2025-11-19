@@ -1,0 +1,148 @@
+<ion-header>
+  <ion-toolbar>
+    <div class="header-container">
+      <h1>Lista de Pedidos</h1>
+      <ion-button fill="clear" class="back-button" (click)="goBack()">
+        <ion-icon name="arrow-back-circle"></ion-icon>
+        Atras
+      </ion-button>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="pedido-content">
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="openModal()">
+      <ion-icon name="add-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <!-- Lista de pedidos -->
+  <ion-list *ngIf="pedidos.length > 0">
+    <ion-item class="pedido-item" *ngFor="let p of pedidos; let i = index">
+      <ion-label>
+        <h2>Pedido #{{ p.id }} - {{ p.clienteName }}</h2>
+        <p>Vendedor: {{ p.vendedorName }}</p>
+        <p>Fecha: {{ p.fecha | date:'yyyy-MM-dd' }}</p>
+        <p>Total: {{ p.total | currency:'USD':'symbol':'1.0-2' }}</p>
+      </ion-label>
+      <ion-buttons slot="end">
+        <ion-button fill="clear" color="medium" (click)="onEdit(p, i)">
+          <ion-icon name="create-outline"></ion-icon>
+        </ion-button>
+        <ion-button fill="clear" color="danger" (click)="deletePedido(i)">
+          <ion-icon name="trash-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-item>
+  </ion-list>
+
+  <!-- Estado vacío -->
+  <div *ngIf="pedidos.length === 0" class="ion-padding" style="text-align:center;color:#666;">
+    Aún no hay pedidos. Pulsa el botón + para agregar.
+  </div>
+
+  <!-- Modal crear/editar -->
+  <ion-modal [isOpen]="isModalOpen">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>{{ isEditing ? 'Editar Pedido' : 'Nuevo Pedido' }}</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="closeModal()">Cerrar</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+
+      <ion-content class="ion-padding">
+        <form [formGroup]="pedidoForm" (ngSubmit)="savePedido()">
+          <ion-item>
+            <ion-label position="stacked">Cliente</ion-label>
+            <ion-select interface="popover" formControlName="clienteId" placeholder="Seleccione un cliente">
+              <ion-select-option *ngFor="let c of clientes" [value]="c.id">{{ c.name }}</ion-select-option>
+            </ion-select>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Vendedor</ion-label>
+            <ion-select interface="popover" formControlName="vendedorId" placeholder="Seleccione un vendedor">
+              <ion-select-option *ngFor="let v of vendedores" [value]="v.id">{{ v.name }}</ion-select-option>
+            </ion-select>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Fecha</ion-label>
+            <div class="date-row">
+              <ion-input
+                type="date"
+                [value]="dateInputValue"
+                (ionInput)="onDateInput($event)"
+                placeholder="YYYY-MM-DD">
+              </ion-input>
+              <ion-button id="date-popover" slot="end" fill="clear" aria-label="Abrir calendario">
+                <ion-icon name="calendar-outline"></ion-icon>
+              </ion-button>
+            </div>
+          </ion-item>
+          <ion-popover trigger="date-popover" showBackdrop="true" keepContentsMounted="true" cssClass="date-popover">
+            <ng-template>
+              <ion-datetime [value]="pedidoForm.get('fecha')?.value" presentation="date" locale="es-EC" (ionChange)="onDatePicked($event)"></ion-datetime>
+            </ng-template>
+          </ion-popover>
+
+          <div class="section-title">Productos</div>
+
+          <ng-container formArrayName="items">
+            <div class="item-row" *ngFor="let g of itemsFA.controls; let i = index" [formGroupName]="i">
+              <ion-item>
+                <ion-label position="stacked">Producto</ion-label>
+                <ion-select interface="popover" formControlName="productId" placeholder="Seleccione un producto" (ionChange)="onProductChange(i)">
+                  <ion-select-option *ngFor="let p of products" [value]="p.id">
+                    {{ p.name }} — {{ p.price | currency:'USD':'symbol':'1.0-2' }}
+                  </ion-select-option>
+                </ion-select>
+              </ion-item>
+
+              <ion-item>
+                <ion-label position="stacked">Cantidad</ion-label>
+                <ion-input type="number" min="1" formControlName="qty" (ionInput)="onQtyChange(i)" placeholder="Ej: 1"></ion-input>
+              </ion-item>
+
+              <ion-item>
+                <ion-label position="stacked">Precio unitario</ion-label>
+                <ion-input formControlName="price" readonly="true"></ion-input>
+              </ion-item>
+
+              <ion-item>
+                <ion-label position="stacked">Total línea</ion-label>
+                <ion-input formControlName="total" readonly="true"></ion-input>
+              </ion-item>
+
+              <div class="line-actions">
+                <ion-button color="danger" fill="outline" size="small" (click)="removeItem(i)">
+                  <ion-icon name="trash-outline" slot="start"></ion-icon>
+                  Quitar
+                </ion-button>
+              </div>
+            </div>
+          </ng-container>
+
+          <ion-button expand="block" fill="outline" (click)="addItem()">
+            <ion-icon name="add-outline" slot="start"></ion-icon>
+            Agregar producto
+          </ion-button>
+
+          <div class="totals">
+            <div>Subtotal: <strong>{{ subtotal | currency:'USD':'symbol':'1.0-2' }}</strong></div>
+            <div>IVA ({{ 15 }}%): <strong>{{ iva | currency:'USD':'symbol':'1.0-2' }}</strong></div>
+            <div>Total: <strong>{{ total | currency:'USD':'symbol':'1.0-2' }}</strong></div>
+          </div>
+
+          <ion-button expand="block" type="submit" class="ion-margin-top" [disabled]="pedidoForm.invalid || itemsFA.length === 0">
+            {{ isEditing ? 'Guardar cambios' : 'Guardar pedido' }}
+          </ion-button>
+        </form>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+</ion-content>

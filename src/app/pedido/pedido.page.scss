@@ -1,0 +1,185 @@
+ion-header {
+  ion-toolbar {
+    --background: linear-gradient(180deg, #fade25, #fade25);
+    --border-width: 0;
+    box-shadow: none !important;
+    border-bottom: none !important;
+
+    .header-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem;
+
+      h1 {
+        margin: 0;
+        color: #000;
+        font-size: 1.2rem;
+        font-weight: 600;
+      }
+
+      .back-button {
+        display: flex;
+        align-items: center;
+        color: #000;
+        font-weight: 500;
+
+        ion-icon {
+          font-size: 24px;
+          margin-right: 4px;
+        }
+      }
+    }
+  }
+}
+
+.pedido-content {
+  --background: #f4f5f7;
+}
+
+ion-list {
+  padding: 12px;
+  --background: transparent !important;
+  background: transparent !important;
+}
+
+ion-item.pedido-item {
+  --padding-start: 8px;
+  --inner-padding-end: 8px;
+  margin: 12px 8px;
+  border-radius: 12px;
+  --background: #f6f7f9 !important;
+  background: #f6f7f9 !important;
+  border: 1px solid #e8e8e8;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+  color: #111;
+}
+
+.section-title {
+  margin: 12px 4px 6px;
+  font-weight: 700;
+  color: #111;
+}
+
+.item-row ion-item {
+  --background: #fff !important;
+  margin-bottom: 8px;
+}
+
+.line-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin: 4px 0 12px;
+}
+
+.totals {
+  margin-top: 12px;
+  padding: 12px;
+  background: #fff;
+  border-radius: 10px;
+  border: 1px solid #eee;
+  display: grid;
+  gap: 6px;
+  color: #111;
+}
+
+/* Modal colores */
+ion-modal ion-header,
+ion-modal ion-toolbar {
+  --background: #ffd84d;
+  --color: #111;
+}
+
+ion-modal ion-item {
+  --background: #fff !important;
+  color: #111 !important;
+}
+
+/* Fondo blanco del modal */
+ion-modal ion-content {
+  --background: #fff !important;
+  background: #fff !important;
+}
+
+/* Fila de fecha con botón de calendario */
+.date-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.date-row ion-input {
+  flex: 1 1 auto;
+}
+
+/* Forzar popover/datetime a tema claro */
+ion-popover {
+  --background: #fff !important;
+  --color: #111 !important;
+  color-scheme: light;
+}
+
+ion-popover::part(content) {
+  background: #fff !important;
+}
+
+ion-popover ion-datetime {
+  --background: #fff !important;
+  /* Forzar colores legibles en el calendario */
+  --title-color: #111;
+  --subtitle-color: #111;
+  --day-names-color: #111;
+  --day-number-color: #111;
+  --day-number-selected-color: #111;
+  --day-number-disabled-color: #999;
+  --today-background: #ffd84d33;
+  --today-color: #111;
+  /* Tamaño mínimo para que se renderice el grid correctamente */
+  min-width: 300px;
+  min-height: 320px;
+}
+
+/* Refuerzos con ::part por si la implementación usa partes internas */
+ion-popover ion-datetime::part(title),
+ion-popover ion-datetime::part(month-year),
+ion-popover ion-datetime::part(days-of-week) {
+  color: #111 !important;
+}
+
+ion-popover ion-datetime::part(calendar-day) {
+  color: #111 !important;
+}
+
+ion-popover ion-datetime::part(calendar-day-disabled) {
+  color: #999 !important;
+}
+
+ion-popover ion-datetime::part(today) {
+  background: rgba(255, 216, 77, 0.2) !important;
+  color: #111 !important;
+}
+
+/* Tamaño del popover y que el calendario use todo el espacio */
+.date-popover {
+  --width: 380px;
+  --min-width: 340px;
+  --max-width: 92vw;
+  --max-height: 90vh;
+}
+
+.date-popover::part(content) {
+  width: var(--width);
+  height: 420px;
+}
+
+.date-popover ion-datetime {
+  width: 100%;
+  height: 100%;
+}
+
+@media (max-width: 420px) {
+  .date-popover::part(content) {
+    width: 92vw;
+    height: 420px;
+  }
+}

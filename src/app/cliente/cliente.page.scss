@@ -1,0 +1,130 @@
+ion-header {
+  ion-toolbar {
+    --background: linear-gradient(180deg, #fade25, #fade25);
+    --border-width: 0;
+    box-shadow: none !important;
+    border-bottom: none !important;
+
+    .header-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem;
+
+      h1 {
+        margin: 0;
+        color: #000;
+        font-size: 1.2rem;
+        font-weight: 600;
+      }
+
+      .back-button {
+        display: flex;
+        align-items: center;
+        color: #000;
+        font-weight: 500;
+
+        ion-icon {
+          font-size: 24px;
+          margin-right: 4px;
+        }
+      }
+    }
+  }
+}
+
+/* Fondo general claro */
+.cliente-content {
+  --background: #f4f5f7;
+}
+
+/* Lista sin fondo para evitar "barra" */
+ion-list {
+  padding: 12px;
+  --background: transparent !important;
+  background: transparent !important;
+}
+
+/* Ítem de cliente: gris suave y menos contraste */
+ion-item.cliente-item {
+  --padding-start: 8px;
+  --inner-padding-end: 8px;
+  margin: 12px 8px;
+  border-radius: 12px;
+  --background: #f6f7f9 !important;
+  background: #f6f7f9 !important;
+  border: 1px solid #e8e8e8;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+  color: #111;
+}
+
+ion-item.cliente-item h2 {
+  margin: 0 0 4px;
+  font-weight: 600;
+  color: #111;
+}
+
+ion-item.cliente-item p {
+  margin: 2px 0;
+  color: #333;
+  font-size: 0.9rem;
+}
+
+/* Ícono de cliente */
+.cliente-icon {
+  font-size: 36px;
+  color: #666;
+  margin-right: 12px;
+}
+
+/* FAB (botón flotante) */
+ion-fab-button {
+  --background: var(--ion-color-primary, #ffd84d);
+  --box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+  color: #111;
+}
+
+/* Modal: encabezado y campos */
+ion-modal ion-header,
+ion-modal ion-toolbar {
+  --background: #ffd84d;
+  --color: #111;
+}
+
+ion-modal ion-title,
+ion-modal ion-button {
+  color: #111 !important;
+  font-weight: 700;
+}
+
+ion-modal ion-item {
+  --background: #fff !important;
+  color: #111 !important;
+  margin-bottom: 12px;
+}
+
+/* Eliminar cualquier sombra/borde bajo el header */
+ion-header, ion-toolbar {
+  box-shadow: none !important;
+  border-bottom: none !important;
+}
+/* Fondo blanco del contenido del modal */
+ion-modal ion-content {
+  --background: #fff !important;
+  background: #fff !important;
+}
+
+ion-header::after,
+ion-toolbar::after,
+ion-header.md::after,
+ion-toolbar.md::after,
+ion-header[translucent]::after,
+ion-toolbar[translucent]::after {
+  background: transparent !important;
+  box-shadow: none !important;
+  border-bottom: none !important;
+  height: 0 !important;
+  content: '' !important;
+  display: none !important;
+  opacity: 0 !important;
+}
